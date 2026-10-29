@@ -4,19 +4,19 @@ Selected coursework from MPCS 56430, organized as a portfolio of computational b
 
 ## Projects
 
-### [Assignment 1 — Sequence Analysis](assignment-1-sequence-analysis/)
+### [Assignment 1 — Sequence Analysis](sequence-analysis/)
 
 Introduces computational biology workflows with DNA and protein sequences. The work covers sequence parsing, the central dogma, translation, biological data exploration, and tested Python utilities developed alongside Jupyter notebooks.
 
-### [Assignment 2 — Genome Analysis](assignment-2-genome-analysis/)
+### [Assignment 2 — Genome Analysis](genome-analysis/)
 
 Builds reusable tools for GC-content analysis, open reading frame and gene finding, CpG-island detection, DNA storage/sonification experiments, and parallel processing of genomic data. The project also includes research notes and SLURM job scripts.
 
-### [Assignment 3 — Sequence Alignment](assignment-3-sequence-alignment/)
+### [Assignment 3 — Sequence Alignment](sequence-alignment/)
 
 Explores computational sequence comparison through Hamming distance, scoring matrices, and pairwise alignment algorithms. It also applies parallel computation to text-pattern experiments and documents the biological and algorithmic background in research materials.
 
-### [Assignment 4 — High-Performance Computing](assignment-4-high-performance-computing/)
+### [Assignment 4 — High-Performance Computing](high-performance-computing/)
 
 Applies parallel and cluster-oriented techniques to large-scale computational biology and text-analysis problems. The project includes notebook investigations, cluster examples, benchmark outputs, and a chromosome 21 gene-analysis workflow.
 
