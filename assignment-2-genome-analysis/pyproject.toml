@@ -1,0 +1,35 @@
+[project]
+name = "module-2-assignment"
+version = "0.1.0"
+description = "MPCS 56430 Module 2 assignment"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "biopython>=1.88",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.3",
+    "scipy>=1.18.1",
+    "sounddevice>=0.5.6",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.15,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-ra"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.3.0",
+    "pdoc>=16.0.0",
+    "pytest>=9.1.1",
+    "ruff>=0.16.9",
+]

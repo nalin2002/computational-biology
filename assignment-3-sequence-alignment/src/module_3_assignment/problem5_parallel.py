@@ -1,0 +1,229 @@
+from pathlib import Path
+from collections import defaultdict
+from multiprocessing import Pool
+from time import perf_counter
+import os
+
+def clean_text(text):
+    return "".join(char.lower() for char in text if char.isalpha())
+
+
+def load_text(file_path):
+    with open(file_path, "r", encoding="utf-8") as file:
+        return clean_text(file.read())
+
+
+def load_words(file_path):
+    with open(file_path, "r", encoding="utf-8") as file:
+        return {
+            word
+            for line in file
+            if len(word := clean_text(line.strip())) >= 4
+        }
+
+def build_word_index(all_words):
+    word_index = defaultdict(list)
+
+    for word in all_words:
+        word_index[word[0]].append(word)
+
+    return dict(word_index)
+
+def find_words(els_text, word_index, names):
+    for pos, char in enumerate(els_text):
+
+        for word in word_index.get(char, []):
+
+            if els_text.startswith(word, pos):
+                yield pos, word, word in names
+
+def find_phrases(entity_matches, window=25):
+    phrases = []
+    cluster = []
+
+    for pos, word in entity_matches:
+
+        if not cluster:
+            cluster = [(pos, word)]
+
+        elif pos - cluster[0][0] <= window:
+            cluster.append((pos, word))
+
+        else:
+            if len(cluster) >= 2:
+                phrases.append(cluster)
+
+            cluster = [(pos, word)]
+
+    if len(cluster) >= 2:
+        phrases.append(cluster)
+
+    return phrases
+
+def find_matches(text, stride, word_index, names):
+
+    els_text = text[::stride]
+
+    word_matches = []
+    entity_matches = []
+
+    for pos, word, is_entity in find_words(
+        els_text, word_index, names
+    ):
+
+        word_matches.append((pos, word))
+
+        if is_entity:
+            entity_matches.append((pos, word))
+
+    phrases = find_phrases(entity_matches, window=25)
+
+    return word_matches, phrases
+
+
+def initialize_worker(text, word_index, names):
+    global WORKER_TEXT, WORKER_INDEX, WORKER_NAMES
+
+    WORKER_TEXT = text
+    WORKER_INDEX = word_index
+    WORKER_NAMES = names
+
+
+def process_stride(stride):
+
+    word_matches, phrases = find_matches(
+        WORKER_TEXT,
+        stride,
+        WORKER_INDEX,
+        WORKER_NAMES
+    )
+
+    return stride, word_matches, phrases
+
+
+def write_results(results, words_file, phrases_file):
+
+    for stride, word_matches, phrases in results:
+
+        for pos, word in word_matches:
+            words_file.write(f"{stride},{pos},{word}\n")
+
+        for phrase in phrases:
+
+            values = [str(stride)]
+
+            for pos, word in phrase:
+                values.extend([str(pos), word])
+
+            phrases_file.write(",".join(values) + "\n")
+
+
+def run_sequential(text, word_index, names, book_name):
+
+    output_dir = Path("../../output/biblecode")
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    words_path = output_dir / f"{book_name}-words.txt"
+    phrases_path = output_dir / f"{book_name}-phrases.txt"
+
+    start = perf_counter()
+
+    with open(words_path, "w") as words_file, \
+         open(phrases_path, "w") as phrases_file:
+
+        for stride in range(2, 1001):
+
+            word_matches, phrases = find_matches(
+                text, stride, word_index, names
+            )
+
+            write_results(
+                [(stride, word_matches, phrases)],
+                words_file,
+                phrases_file
+            )
+
+    return perf_counter() - start
+
+
+def run_parallel(text, word_index, names, book_name):
+
+    output_dir = Path("../../output/biblecode")
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    words_path = output_dir / f"{book_name}-parallel-words.txt"
+    phrases_path = output_dir / f"{book_name}-parallel-phrases.txt"
+
+    start = perf_counter()
+
+    with open(words_path, "w") as words_file, \
+         open(phrases_path, "w") as phrases_file:
+
+        with Pool(
+            processes=os.cpu_count(),
+            initializer=initialize_worker,
+            initargs=(text, word_index, names)
+        ) as pool:
+
+            results = pool.imap(
+                process_stride,
+                range(2, 1001),
+                chunksize=10
+            )
+
+            for result in results:
+                write_results(
+                    [result],
+                    words_file,
+                    phrases_file
+                )
+
+    return perf_counter() - start
+
+
+def main():
+
+    words = load_words("../../data/words_10k.txt")
+    names = load_words("../../data/names_and_dates.txt")
+
+    all_words = words | names
+
+    word_index = build_word_index(all_words)
+
+    books = {
+        "bible": "../../data/bible.txt",
+        "warandpeace": "../../data/war-and-peace.txt",
+        "moby-dick": "../../data/moby-dick.txt"
+    }
+
+    print(
+        f"{'Text':<18}"
+        f"{'Sequential':<15}"
+        f"{'Parallel':<15}"
+        f"{'Speedup':<10}"
+    )
+
+    for book_name, file_path in books.items():
+
+        text = load_text(file_path)
+
+        sequential_time = run_sequential(
+            text, word_index, names, book_name
+        )
+
+        parallel_time = run_parallel(
+            text, word_index, names, book_name
+        )
+
+        speedup = sequential_time / parallel_time
+
+        print(
+            f"{book_name:<18}"
+            f"{sequential_time:<15.2f}"
+            f"{parallel_time:<15.2f}"
+            f"{speedup:<10.2f}x"
+        )
+
+
+if __name__ == "__main__":
+    main()

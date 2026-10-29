@@ -1,0 +1,18 @@
+# Python and notebook artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Local environments and editor files
+.venv/
+.DS_Store
+.vscode/
+
+# Large/generated genomic data
+**/data/NC_000021.fasta
+**/data/NC_000021_parallel_smoke/
+**/data/chromosome-21/chr21.fasta
+

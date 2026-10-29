@@ -1,0 +1,9 @@
+Homo sapiens
+Equus caballus
+Canis lupus familiaris
+Tursiops truncatus
+Bos taurus
+Mus musculus
+Hippopotamus amphibius
+Sus scrofa
+Balaenoptera musculus

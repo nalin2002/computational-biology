@@ -1,0 +1,28 @@
+This file describes where and how I used Claude while working on the five problem notebooks.
+
+Problem 1
+
+I used Claude for the question asking how long it would take to compute pi to 70,030 digits using my implementation. 
+I mainly used it to understand the relevant concepts needed to estimate the runtime, particularly the standard theoretical convergence rate of Monte Carlo methods.
+
+Problem 2
+
+I had not used Python’s yield keyword before, so I used Claude to understand how yield and generators work, when they should be used, and how calling a generator 
+function differs from calling a function that uses a normal return statement. This helped me understand how to process FASTA records one at a time without loading 
+the entire file into memory.
+
+Problem 3
+
+I did not use Claude for this problem.
+
+Problem 4
+
+I used Claude mainly to help with the logic for handling the six reading frames, particularly how to use offsets to obtain the three reading frames on each strand.
+I also used it for Python syntax and to find cleaner, more Pythonic ways of implementing parts of the code.
+
+For the follow-up question about whether an ORF is necessarily a gene, I used Claude to understand how the expected number of codons before encountering a stop codon could be modeled using a geometric distribution.
+
+Problem 5
+
+I was clear about the overall logic for this problem, but I used Claude for help with Python syntax and for finding a clean, Pythonic way to implement the computation.
+In particular, I used it to help structure the iteration over the codons, codon positions, and possible nucleotide substitutions.

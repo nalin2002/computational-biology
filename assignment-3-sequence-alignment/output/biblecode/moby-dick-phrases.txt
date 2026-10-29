@@ -1,0 +1,16 @@
+2,42016,isis,42018,isis,42020,isis
+4,189106,isis,189127,bohr
+6,78121,kant,78127,noah
+11,25572,nasa,25583,hume
+13,42209,bush,42221,aids
+22,134,pele,142,taft
+25,36117,shiva,36133,bolt
+26,10104,lula,10128,kant
+29,11859,noah,11872,bohr
+42,13224,nasa,13249,drake
+45,4420,hume,4430,isis
+132,4978,pele,5001,enron
+338,568,nasa,571,amir
+412,1249,mark,1257,lula
+701,1095,taft,1117,howe
+774,342,nasa,355,hume

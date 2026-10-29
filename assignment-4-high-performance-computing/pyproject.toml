@@ -1,0 +1,32 @@
+[project]
+name = "module-4-assignment"
+version = "0.1.0"
+description = "MPCS 56430 Module 4 assignment"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.3",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.15,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-ra"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.3.0",
+    "pdoc>=16.0.0",
+    "pytest>=9.1.1",
+    "ruff>=0.16.9",
+]

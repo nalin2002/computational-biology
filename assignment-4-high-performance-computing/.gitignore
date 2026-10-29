@@ -1,0 +1,22 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# Chromosome 21 (47 MB): too big for git. Problem 7 says how to download it
+data/chromosome-21/chr21.fasta
+data/NC_000021*
